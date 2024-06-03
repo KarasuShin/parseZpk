@@ -6,7 +6,7 @@ def parseMeta(root):
         topic_id = readMetaAttr("topic_id", content)
         word_level_id = readMetaAttr("word_level_id", content)
         tag_id = readMetaAttr("tag_id", content)
-        word = readMetaAttr("word", content)
+        word = readMetaAttrWord("word", content)
         word_audio = readMetaAttr("word_audio", content)
         image_file = readMetaAttr("image_file", content)
         accent = readMetaAttr("accent", content)
@@ -100,6 +100,16 @@ def readZpk():
 
 def readMetaAttr(name, content):
     res = re.findall('\"' + name + '\":(.*?),', content)
+    if len(res) > 0:
+        attr = res[0]
+        if attr[0] == '"' and attr[-1] == '"':
+            attr = attr[1:-1]
+        return attr
+    else:
+        return ''
+
+def readMetaAttrWord(name, content):
+    res = re.findall('\"' + name + '\":(.*?)}', content)
     if len(res) > 0:
         attr = res[0]
         if attr[0] == '"' and attr[-1] == '"':
