@@ -25,7 +25,7 @@ def parseMeta(root):
         d = {"topic_id":topic_id, "word_level_id":word_level_id, "tag_id": tag_id, "word": word, "word_audio": word_audio, "image_file":image_file, "accent":accent, "mean_cn":mean_cn, "mean_en":mean_en, "sentence_phrase":sentence_phrase, "deformation_img":deformation_img, "sentence":sentence, "sentence_trans":sentence_trans, "sentence_audio":sentence_audio, "cloze_data": cloze_data, "cloze":cloze, "options":options, "tips":tips, "word_etyma":word_etyma}
         word = word.replace('"', '')
         print(filename)
-        os.mkdir(root + 'project_output/' + word + '/')
+        os.makedirs(root + 'project_output/' + word + '/', exist_ok=True)
         with open(root + 'project_output/' + word + '/data.txt', 'w', encoding = 'utf-8') as f:
             f.write(content)
         with open(root + 'project_output/' + word + '/word.json', 'w', encoding = 'utf-8') as f:
@@ -127,9 +127,9 @@ if __name__ == "__main__":
     for root, dirs, files in os.walk('./'):
         if root != './':
             root += '/'
-            os.mkdir(root + 'project_output/')
+            os.makedirs(root + 'project_output/', exist_ok=True)
             for file in os.listdir(root):
-                if file != 'project_output':
+                if ".zpk" in file:
                     filename = root + file
                     data = readZpk()
                     word = parseMeta(root)
@@ -139,7 +139,7 @@ if __name__ == "__main__":
                     for i in fileList['list'].split('\n'):
                         info =  i.split('.')
                         name =info[0]
-                        ext = str.lower(info[1])
+                        ext = str.lower(info[1] if len(info) > 1 else "")
                         if ext == 'jpg' or ext == 'jpeg':
                             parseJPG(data, i)
                         elif ext == 'png':
